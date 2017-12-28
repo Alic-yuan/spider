@@ -1,15 +1,16 @@
 import json
+
 import requests
 from pymongo import MongoClient
 from lxml import etree
 from multiprocessing import Pool
-import time
+import datetime
 
 
-# MONGO_URL = 'mongodb://admin:yjl123@42.123.126.65:27027/'
-MONGO_URL = 'localhost'
+MONGO_URL = 'mongodb://admin:yjl123@42.123.126.65:27027/'
+# MONGO_URL = 'localhost'
 MONGO_DB = 'lagou2'
-MONGO_TABLE = 'lagou_job'
+MONGO_TABLE = 'lagou_job2'
 
 client = MongoClient(MONGO_URL,connect=True)
 db = client[MONGO_DB]
@@ -62,6 +63,8 @@ header = {
     }
 
 proxies = get_proxy()
+
+
 
 def get_html():
     try:
@@ -120,24 +123,7 @@ def parse(html):
                             positionIds = json.loads(response.text).get('content').get('positionResult').get('result')
 
                         for positionId in positionIds:
-                            # try:
                             position = positionId.get('positionId')
-                            # except:
-                            #     continue
-                            # print(positionId)
-                            #
-                            #item = {}
-                            # self.item = info
-                            # item['companyFullName'] = positionId['companyFullName']  # 公司名字
-                            # # #print(info['公司名字'])
-                            # item['city'] = positionId['city']  # 职位城市
-                            # item['positionName'] = positionId['positionName']  # 招聘职位
-                            # item['formatCreateTime'] = positionId['formatCreateTime']  # 发布时间
-                            # item['salary'] = positionId['salary']  # 薪资待遇
-                            # item['workYear'] = positionId['workYear']  # 经验要求
-                            # item['companySize'] = positionId['companySize']  # 公司大小
-                            # item['positionAdvantage'] = positionId['positionAdvantage']  # 公司福利
-                            # item['district'] = positionId['district']  # 公司地址
                             info_url = "https://www.lagou.com/jobs/{}.html".format(str(position))
                             download(info_url)
                     except json.decoder.JSONDecodeError:
@@ -160,7 +146,16 @@ def download(info_url):
         item['companyFullName'] = response2.xpath('//*[@id="job_company"]/dt/a/img/@alt')  # 公司名字
         item['city'] = response2.xpath('/html/body/div[2]/div/div[1]/dd/p[1]/span[2]/text()')  # 职位城市
         item['positionName'] = response2.xpath('/html/body/div[2]/div/div[1]/div/span/text()')  # 招聘职位
-        item['formatCreateTime'] = response2.xpath('/html/body/div[2]/div/div[1]/dd/p[2]/text()')  # 发布时间
+        fbsj = response2.xpath('/html/body/div[2]/div/div[1]/dd/p[2]/text()')[0]  # 发布时间
+        if fbsj == '1天前  发布于拉勾网':
+            fbsj = (datetime.date.today() - datetime.timedelta(days=1)).strftime('%Y%m%d')
+        elif fbsj == '2天前  发布于拉勾网':
+            fbsj = (datetime.date.today() - datetime.timedelta(days=2)).strftime('%Y%m%d')
+        else:
+            fbsj = datetime.date.today().strftime('%Y%m%d')
+        ar = []
+        ar.append(fbsj)
+        item['formatCreateTime'] = ar
         item['salary'] = response2.xpath('/html/body/div[2]/div/div[1]/dd/p[1]/span[1]/text()')  # 薪资待遇
         item['workYear'] = response2.xpath('/html/body/div[2]/div/div[1]/dd/p[1]/span[3]/text()')  # 经验要求
         item['Jobdescriptions'] = response2.xpath('//*[@id="job_detail"]/dd[2]/div/p/text()')  # 职位描述
@@ -178,7 +173,8 @@ def download(info_url):
         item['address'] = response2.xpath(
             'string(normalize-space(//*[@id="job_detail"]/dd[3]/div[1]))').replace('\n', '')
         if db[MONGO_TABLE].find_one(item['_id']):
-            print('已爬取')
+            db[MONGO_TABLE].update_one({'_id': item['_id']},{"$addToSet": {'formatCreateTime':fbsj}}, upsert=True)
+            print('更新成功')
         else:
             db[MONGO_TABLE].insert(dict(item))
             print('插入成功')
