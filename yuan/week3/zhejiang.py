@@ -5,7 +5,7 @@ from multiprocessing import Pool
 import json
 import datetime
 
-MONGO_URL = 'mongodb://admin:yjl123@42.123.126.65:27027/'
+MONGO_URL = ''
 MONGO_DB = 'panjue'
 MONGO_TABLE = 'zhejiang_info'
 #
@@ -19,8 +19,8 @@ def get_proxy():
         proxyPort = "9020"
 
         # 代理隧道验证信息
-        proxyUser = "HA0BA166652L8P6D"
-        proxyPass = "EDD43CF359807834"
+        proxyUser = ""
+        proxyPass = ""
 
         proxyMeta = "http://%(user)s:%(pass)s@%(host)s:%(port)s" % {
           "host" : proxyHost,
