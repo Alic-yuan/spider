@@ -5,7 +5,7 @@ import time
 import datetime
 
 
-MONGO_URL = 'mongodb://admin:yjl123@42.123.126.65:27027/'
+
 # MONGO_URL = 'localhost'
 MONGO_DB = 'qianlima'
 MONGO_TABLE = 'qianlima_info'
