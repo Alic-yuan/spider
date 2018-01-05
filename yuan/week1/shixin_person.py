@@ -7,13 +7,13 @@ from multiprocessing import Pool
 
 
 
-MONGO_URL = 'mongodb://admin:yjl123@42.123.126.65:27027/'
+MONGO_URL = ''
 MONGO_DB = 'shixin'
 MONGO_TABLE = 'shixin_person'
 #
 client = MongoClient(MONGO_URL,connect=True)
 db = client[MONGO_DB]
-#client = MongoClient('mongodb://admin:yjl123@42.123.126.65:27027/',connect=True)
+
 # db = client[MONGO_DB]
 
 def get_proxy():
@@ -24,8 +24,8 @@ def get_proxy():
         proxyPort = "9020"
 
         # 代理隧道验证信息
-        proxyUser = "HA0BA166652L8P6D"
-        proxyPass = "EDD43CF359807834"
+        proxyUser = ""
+        proxyPass = ""
 
         proxyMeta = "http://%(user)s:%(pass)s@%(host)s:%(port)s" % {
           "host" : proxyHost,
