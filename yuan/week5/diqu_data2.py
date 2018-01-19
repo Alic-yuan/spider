@@ -5,7 +5,7 @@ import json
 from concurrent.futures import ThreadPoolExecutor
 
 
-MONGO_URL = 'mongodb://admin:yjl123@42.123.126.65:27027/'
+
 # MONGO_URL = 'localhost'
 MONGO_DB = 'diqu_shuju'
 MONGO_TABLE = 'data'
