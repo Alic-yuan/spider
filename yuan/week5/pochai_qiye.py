@@ -3,7 +3,6 @@ from bs4 import BeautifulSoup
 from pymongo import MongoClient
 from selenium import webdriver
 
-MONGO_URL = 'mongodb://admin:yjl123@42.123.126.65:27027/'
 # MONGO_URL = 'localhost'
 MONGO_DB = 'pochai_info'
 MONGO_TABLE = 'pochai_qiye'
