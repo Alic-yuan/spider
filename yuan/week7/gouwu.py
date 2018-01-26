@@ -4,7 +4,7 @@ from pymongo import MongoClient
 
 
 
-MONGO_URL = 'mongodb://admin:yjl123@42.123.126.65:27027/'
+
 # MONGO_URL = 'localhost'
 MONGO_DB = 'luntan'
 MONGO_TABLE = 'gouwu_info'
