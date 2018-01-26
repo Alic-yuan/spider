@@ -3,7 +3,7 @@ from pymongo import MongoClient
 import json
 import copy
 
-MONGO_URL = 'mongodb://admin:yjl123@42.123.126.65:27027/'
+
 # MONGO_URL = 'localhost'
 MONGO_DB = 'tjj_GJ'
 MONGO_TABLE = 'fsjd_data'
