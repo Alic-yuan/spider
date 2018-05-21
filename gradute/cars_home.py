@@ -76,7 +76,7 @@ class CarsHome(object):
                             self.logch.info('{}存入成功'.format(type))
                             x += 1
                     except Exception:
-                        self.logch.error('在{}出错'.format(link2))
+                        self.logch.war('在{}出错'.format(link2))
                         pass
         except Exception:
             self.logch.error('在{}出错'.format(link))
